@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terminix Active Listening Soundboard</title>
+  <style>
+    :root {
+      --brand-green: #006039;
+      --brand-green-dark: #00472a;
+      --brand-green-light: #e8f3ee;
+      --bg-page: #f4f6f5;
+      --bg-card: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --border-color: #e5e7eb;
+      --easy-bg: #dcfce7;
+      --easy-text: #166534;
+      --med-bg: #fef3c7;
+      --med-text: #92400e;
+      --hard-bg: #fee2e2;
+      --hard-text: #991b1b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding-bottom: 48px;
+    }
+
+    header {
+      background-color: var(--brand-green);
+      color: #ffffff;
+      padding: 20px 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-title h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .header-title p {
+      font-size: 0.875rem;
+      opacity: 0.9;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 15px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-white {
+      background-color: #ffffff;
+      color: var(--brand-green);
+    }
+
+    .btn-white:hover:not(:disabled) {
+      background-color: #f3f4f6;
+    }
+
+    .btn-outline-white {
+      background-color: transparent;
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.65);
+    }
+
+    .btn-outline-white:hover:not(:disabled) {
+      background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .btn-primary {
+      background-color: var(--brand-green);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--brand-green-dark);
+    }
+
+    .btn-secondary {
+      background-color: #4b5563;
+      color: #ffffff;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: #374151;
+    }
+
+    .btn-light {
+      background-color: #f3f4f6;
+      color: #374151;
+      border-color: #d1d5db;
+    }
+
+    .btn-light:hover:not(:disabled) {
+      background-color: #e5e7eb;
+    }
+
+    .btn-danger-outline {
+      background-color: transparent;
+      color: #dc2626;
+      border-color: #dc2626;
+      width: 100%;
+    }
+
+    .btn-danger-outline:hover {
+      background-color: #fef2f2;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 24px auto 0;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background-color: var(--bg-card);
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 10px;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--brand-green);
+    }
+
+    /* Scenario List */
+    .scenario-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .scenario-item {
+      text-align: left;
+      background-color: #f9fafb;
+      border: 1.5px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .scenario-item:hover {
+      border-color: #9ca3af;
+      background-color: #f3f4f6;
+    }
+
+    .scenario-item.active {
+      background-color: var(--brand-green-light);
+      border-color: var(--brand-green);
+    }
+
+    .scenario-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .scenario-item-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text-main);
+    }
+
+    .scenario-item-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .badge-easy { background: var(--easy-bg); color: var(--easy-text); }
+    .badge-medium { background: var(--med-bg); color: var(--med-text); }
+    .badge-hard { background: var(--hard-bg); color: var(--hard-text); }
+
+    /* Player Controls */
+    .live-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #dc2626;
+      background: #fee2e2;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    .live-dot::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #dc2626;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.25); }
+    }
+
+    .progress-wrap {
+      margin: 14px 0 6px;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 10px;
+      background-color: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background-color: var(--brand-green);
+      border-radius: 999px;
+      transition: width 0.1s linear;
+    }
+
+    .time-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .player-buttons {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .player-buttons .btn {
+      padding: 12px;
+      font-size: 0.95rem;
+    }
+
+    .speed-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.82rem;
+    }
+
+    .speed-pills {
+      display: flex;
+      gap: 4px;
+    }
+
+    .speed-pill {
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .speed-pill.active {
+      background: var(--brand-green);
+      color: #ffffff;
+      border-color: var(--brand-green);
+    }
+
+    .file-status-box {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      background: #f9fafb;
+      border: 1px solid var(--border-color);
+    }
+
+    .file-status-box.ok {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: #166534;
+    }
+
+    .file-status-box.warn {
+      background: #fffbeb;
+      border-color: #fde68a;
+      color: #92400e;
+    }
+
+    .file-actions-row {
+      margin-top: 8px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* Script Box */
+    .script-hidden {
+      background: #f9fafb;
+      border: 1.5px dashed #d1d5db;
+      border-radius: 8px;
+      padding: 28px 16px;
+      text-align: center;
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 0.92rem;
+    }
+
+    .script-visible {
+      background: #f9fafb;
+      border-left: 4px solid var(--brand-green);
+      border-radius: 6px;
+      padding: 16px;
+    }
+
+    .script-text {
+      font-size: 1.05rem;
+      font-style: italic;
+      color: #111827;
+      line-height: 1.6;
+    }
+
+    .script-cue {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Answer Key */
+    .ak-section {
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .ak-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .ak-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--brand-green);
+      margin-bottom: 6px;
+    }
+
+    .ak-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .ak-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sub-card {
+      background: #f9fafb;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .sub-card h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #111827;
+    }
+
+    .sub-card p {
+      font-size: 0.875rem;
+      color: #374151;
+    }
+
+    .detail-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.9rem;
+    }
+
+    .detail-tag {
+      display: inline-block;
+      font-weight: 700;
+      font-size: 0.78rem;
+      padding: 1px 7px;
+      border-radius: 4px;
+      margin-right: 6px;
+      text-transform: uppercase;
+    }
+
+    .tag-said { background: #dcfce7; color: #166534; }
+    .tag-implied { background: #dbeafe; color: #1e40af; }
+    .tag-unsaid { background: #f3f4f6; color: #374151; }
+
+    .callout-box {
+      background: var(--brand-green-light);
+      border: 1px solid rgba(0, 96, 57, 0.22);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 0.9rem;
+    }
+
+    .crm-box {
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: #111827;
+    }
+
+    .intent-pill {
+      display: inline-block;
+      background: #1f2937;
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* Accordion / Details */
+    details.card summary {
+      font-weight: 700;
+      color: var(--brand-green);
+      cursor: pointer;
+      font-size: 1.02rem;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    details.card summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.card[open] summary {
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .rubric-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 12px;
+    }
+
+    .rubric-table th, .rubric-table td {
+      border: 1px solid var(--border-color);
+      padding: 9px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .rubric-table th {
+      background: #f3f4f6;
+      font-weight: 700;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: #ffffff;
+      border-radius: 10px;
+      max-width: 560px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #374151;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.88rem;
+    }
+
+    .form-group textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-title">
+        <h1>Terminix Active Listening Soundboard</h1>
+        <p>BPO New Hire Communications Training • Live Facilitated Drill</p>
+      </div>
+      <div class="header-actions">
+        <label class="btn btn-white" title="Select all 5 Scenario MP4 files at once from your computer">
+          📂 Bulk-Link MP4 Clips
+          <input type="file" id="bulkFileInput" accept="audio/*,video/mp4" multiple style="display:none" />
+        </label>
+        <button class="btn btn-outline-white" id="openAddModalBtn">+ Add Scenario</button>
+        <label class="btn btn-outline-white">
+          Import JSON
+          <input type="file" id="jsonUploadInput" accept=".json" style="display:none" />
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Left Column: Scenario Selector & Media Player -->
+    <div>
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">1. Choose Call Clip</h2>
+          <span id="scenarioCount" style="font-size:0.78rem; color:var(--text-muted); font-weight:600;">5 Clips</span>
+        </div>
+        <div class="scenario-list" id="scenarioList"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">2. Classroom Player</h2>
+          <span class="live-dot" id="liveIndicator" style="display:none;">PLAYING</span>
+        </div>
+
+        <!-- Hidden HTML5 video element handles MP4 audio/video cleanly -->
+        <video id="mediaPlayer" playsinline style="display:none;"></video>
+
+        <div class="progress-wrap" id="progressWrap" title="Click anywhere to seek">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+        </div>
+        <div class="time-row">
+          <span id="currentTimeLabel">00:00</span>
+          <span id="durationLabel">00:00</span>
+        </div>
+
+        <div class="player-buttons">
+          <button class="btn btn-primary" id="playPauseBtn">▶ Play Clip</button>
+          <button class="btn btn-secondary" id="stopBtn">■ Stop / Reset</button>
+        </div>
+
+        <div class="speed-row">
+          <span style="font-weight:600; color:#374151;">Playback Speed:</span>
+          <div class="speed-pills" id="speedPills">
+            <button class="speed-pill" data-rate="0.85">0.85x</button>
+            <button class="speed-pill active" data-rate="1">1.0x</button>
+            <button class="speed-pill" data-rate="1.15">1.15x</button>
+          </div>
+        </div>
+
+        <div class="file-status-box ok" id="fileStatusBox">
+          <div id="fileStatusText"><strong>Linked File:</strong> Scenario 1.mp4</div>
+          <div class="file-actions-row">
+            <label class="btn btn-light" style="padding:5px 10px; font-size:0.78rem;">
+              Change Audio File
+              <input type="file" id="singleFileInput" accept="audio/*,video/mp4" style="display:none" />
+            </label>
+            <button class="btn btn-light" id="ttsFallbackBtn" style="padding:5px 10px; font-size:0.78rem;" title="Use built-in computer voice if MP4 file isn't in this folder">
+              🔊 Backup Voice
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-danger-outline" id="deleteScenarioBtn" style="display:none;">
+        Delete Custom Scenario
+      </button>
+    </div>
+
+    <!-- Right Column: Blind Script, Facilitator Key & Rubrics -->
+    <div>
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Customer Call Transcript</h2>
+          <button class="btn btn-light" id="toggleScriptBtn">Show Script (Trainer Only)</button>
+        </div>
+        <div id="scriptContainer"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header" style="border-bottom:1px solid var(--border-color); padding-bottom:12px;">
+          <h2 class="card-title">Facilitator Answer Key</h2>
+          <span id="activeBadges"></span>
+        </div>
+        <div id="answerKeyContainer"></div>
+      </div>
+
+      <details class="card">
+        <summary>
+          <span>5-Step Post-Clip Drill & 1–4 Scoring Rubric (Click to Expand)</span>
+          <span>▼</span>
+        </summary>
+        <div style="font-size:0.88rem; color:#374151;">
+          <p style="margin-bottom:10px;"><strong>Live Session Rule:</strong> Play each clip once with <em>no note-taking</em> on the first listen. Then run these 5 steps aloud:</p>
+          <ol style="padding-left:20px; margin-bottom:16px; display:flex; flex-direction:column; gap:4px;">
+            <li><strong>Fact & Subtext Check:</strong> Core issue, emotional trigger, and what was Said vs. Implied vs. Unsaid.</li>
+            <li><strong>Intent & Emotion Tag:</strong> Agree on a 2-part tag (e.g., <em>Intent: Reschedule / Emotion: Neutral</em>).</li>
+            <li><strong>One-Sentence CRM Summary:</strong> 30-second write, then pick 2 trainees to read aloud.</li>
+            <li><strong>Live Agent Role-Play:</strong> Hot-seat immediate spoken reply graded on tone and accuracy.</li>
+            <li><strong>Peer Listening Rating:</strong> Class holds up 1–4 fingers and explains what was caught or missed.</li>
+          </ol>
+
+          <p style="font-weight:700; color:#111827; margin-bottom:6px;">1–4 Active Listening Scale:</p>
+          <ul style="padding-left:20px; margin-bottom:14px; display:flex; flex-direction:column; gap:3px;">
+            <li><strong>4 (Exemplary):</strong> Caught all explicit facts <em>and</em> implied/unstated concerns, matched tone, gave accurate next step.</li>
+            <li><strong>3 (Solid):</strong> Caught main facts and emotional tone, missed one secondary detail, gave clear next step.</li>
+            <li><strong>2 (Partial):</strong> Focused only on literal surface words, missed emotional driver or pivot, sounded robotic.</li>
+            <li><strong>1 (Missed):</strong> Misheard key facts (date/pest/address), ignored frustration, or jumped straight into policy.</li>
+          </ul>
+
+          <table class="rubric-table">
+            <thead>
+              <tr>
+                <th>Trainee Task</th>
+                <th>Strong Response (Meets Standard)</th>
+                <th>Weak Response (Needs Coaching)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Details & Subtext</strong></td>
+                <td>Recalls exact numbers/addresses and spots unspoken concerns (auto-pay threat, warranty fear).</td>
+                <td>Confuses pest types or dates; repeats only the first sentence the caller said.</td>
+              </tr>
+              <tr>
+                <td><strong>2. CRM Summary</strong></td>
+                <td>Captures who/where, what happened, and what is needed in one crisp sentence (&lt;25 words).</td>
+                <td>Writes a run-on paragraph or vague label (<em>"Customer is mad about billing"</em>).</td>
+              </tr>
+              <tr>
+                <td><strong>3. Intent & Emotion</strong></td>
+                <td>Names both functional goal and specific emotion (<em>anxious, guarded, undervalued</em>) + why.</td>
+                <td>Labels every upset caller simply as <em>"angry"</em> or confuses emotion with request.</td>
+              </tr>
+              <tr>
+                <td><strong>4. Agent Role-Play</strong></td>
+                <td>Leads with tailored empathy, mirrors key details, avoids excuses, asks one clear question.</td>
+                <td>Uses canned apologies, blames dispatch/traffic, or re-asks info already given.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </main>
+
+  <!-- Add Scenario Modal -->
+  <div class="modal-backdrop" id="addModal">
+    <div class="modal">
+      <div class="card-header">
+        <h2 class="card-title">Add Custom Training Scenario</h2>
+        <button class="btn btn-light" id="closeAddModalBtn">✕</button>
+      </div>
+      <form id="addScenarioForm">
+        <div class="form-group">
+          <label>Scenario Title *</label>
+          <input type="text" id="newTitle" placeholder="e.g., Clip 6: Mosquito Yard Treatment Callback" required />
+        </div>
+        <div class="ak-grid-2">
+          <div class="form-group">
+            <label>Difficulty</label>
+            <select id="newDifficulty">
+              <option value="Easy">Easy</option>
+              <option value="Medium" selected>Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <input type="text" id="newCategory" placeholder="e.g., Callback / Re-service" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Attach Audio/MP4 File (Optional)</label>
+          <input type="file" id="newAudioFile" accept="audio/*,video/mp4" />
+        </div>
+        <div class="form-group">
+          <label>Customer Spoken Script *</label>
+          <textarea id="newScript" placeholder="Write what the customer says..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Core Issue (Answer Key)</label>
+          <input type="text" id="newCoreIssue" placeholder="What is the primary problem?" />
+        </div>
+        <div class="ak-grid-2">
+          <div class="form-group">
+            <label>Emotional State</label>
+            <input type="text" id="newEmotion" placeholder="e.g., Impatient, worried" />
+          </div>
+          <div class="form-group">
+            <label>Intent & Emotion Tag</label>
+            <input type="text" id="newTag" placeholder="e.g., Intent: Re-service / Emotion: Frustrated" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Sample 1-Sentence CRM Summary</label>
+          <input type="text" id="newSummary" placeholder="One crisp sentence..." />
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+          <button type="button" class="btn btn-light" id="cancelAddBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Scenario</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const initialScenarios = [
+  {
+    "id": "clip-1",
+    "title": "Clip 1: Routine Appointment Reschedule",
+    "difficulty": "Easy",
+    "category": "Scheduling / Service Appointment",
+    "audio_url": "Scenario 1.mp4",
+    "duration_hint": "0:20",
+    "script": "Hi, yeah, um... I need to move my regular pest control visit. I'm at 742 Elm Street, and we're starting to see sugar ants by the kitchen sink again. I'm supposed to be on the schedule for this Thursday, I think? Can we push that to next week instead?",
+    "emotion_cue": "Calm, casual, and mildly distracted (multitasking while calling).",
+    "answer_key": {
+      "core_issue": "Customer wants to reschedule their upcoming Thursday routine pest service to next week and has active sugar ants in the kitchen.",
+      "emotional_state": "Calm and matter-of-fact; mildly distracted (likely multitasking), not upset about the ants yet.",
+      "underlying_driver": "Desire for convenience + mild household annoyance. They don't view the sugar ants as an emergency; they view this call as a quick errand to cross off their to-do list.",
+      "details_said": "Address (742 Elm Street), pest type (sugar ants near kitchen sink), current tentative appointment (this Thursday), requested move (next week).",
+      "details_implied": "They need an interior treatment included during the visit, not just a standard exterior perimeter spray.",
+      "details_unsaid": "Exact day/time window next week, account holder name/phone number, and whether they have pets/children inside.",
+      "needs_next": "Verification of the account, confirmation of the Thursday appointment, available time slots next week, and a technician note to treat the interior kitchen area.",
+      "summary": "Customer at 742 Elm Street wants to reschedule Thursday's routine service to next week and needs interior treatment for sugar ants in the kitchen.",
+      "intent_emotion": "Intent: Reschedule & add target pest / Emotion: Neutral, cooperative.",
+      "roleplay_benchmark": "Respond directly to the customer, acknowledging the ant issue and moving into rescheduling. (Strong reply confirms 742 Elm Street, notes the sugar ants for interior treatment, and offers two specific day/time options for next week.)",
+      "emotional_cue_for_trainees": "Don't over-apologize or treat the ants like a crisis. Match their easy, efficient pace so they feel taken care of without wasting their time."
+    }
+  },
+  {
+    "id": "clip-2",
+    "title": "Clip 2: Unexpected Billing Charge",
+    "difficulty": "Easy",
+    "category": "Billing Dispute / Account Inquiry",
+    "audio_url": "Scenario 2.mp4",
+    "duration_hint": "0:21",
+    "script": "Hey, good morning. I'm looking at my bank statement and there's a charge from Terminix for a hundred and forty-five dollars from Tuesday. Uh... I thought I was set up on the monthly plan, so I'm kind of confused why a lump sum came out all at once.",
+    "emotion_cue": "Polite, puzzled, and slightly hesitant.",
+    "answer_key": {
+      "core_issue": "Customer is questioning a $145 charge posted on Tuesday because they believed they were billed monthly.",
+      "emotional_state": "Confused and mildly concerned\u2014not hostile\u2014driven by a mismatch between expected recurring monthly billing and a larger lump-sum draft.",
+      "underlying_driver": "Financial surprise and loss of predictability. Seeing $145 leave a bank account when you budgeted for a smaller monthly draft creates instant unease. Because they are still giving Terminix the benefit of the doubt, they aren't angry yet\u2014but confusion turns into anger fast if an agent sounds dismissive or reads policy jargon.",
+      "details_said": "Charge amount ($145), transaction day (Tuesday), expected billing frequency (monthly plan).",
+      "details_implied": "They may be on a quarterly/per-service billing plan instead of a monthly budget plan, or a one-time service/initial fee was billed.",
+      "details_unsaid": "Name, service address, account number, and whether a technician recently visited the property.",
+      "needs_next": "Reassurance that the agent will look into the charge, account verification, and a clear breakdown of what the $145 covers and how their billing plan is structured.",
+      "summary": "Customer is confused by a $145 lump-sum charge from Tuesday because they believed they were enrolled in a monthly billing plan.",
+      "intent_emotion": "Intent: Billing clarification / Emotion: Confused, cautious.",
+      "roleplay_benchmark": "De-escalate the confusion and transition smoothly into account verification. (Strong reply validates why a $145 draft would be surprising when expecting monthly billing, assures them we will check the invoice right away, and asks for their name and service address.)",
+      "emotional_cue_for_trainees": "Validate immediately that an unexpected lump sum is jarring. Reassurance lowers their guard before you even pull up the invoice."
+    }
+  },
+  {
+    "id": "clip-3",
+    "title": "Clip 3: Missed Appointment & Escalating Frustration",
+    "difficulty": "Medium",
+    "category": "Service Appointment / Retention Risk",
+    "audio_url": "Scenario 3.mp4",
+    "duration_hint": "0:19",
+    "script": "Look, I've been waiting since eight o'clock this morning for a technician to come out to 412 Birch Lane for a roach follow-up. It's almost one now, nobody called, nobody showed... and I took half a day off work for this. Honestly, I don't know why I'm even paying for a service plan.",
+    "emotion_cue": "Tense, clipped, and exasperated.",
+    "answer_key": {
+      "core_issue": "Technician missed an 8:00 AM\u201312:00 PM arrival window for a roach follow-up without notifying the customer.",
+      "emotional_state": "Frustrated and feeling disrespected; driven by lost wages/PTO from taking half a day off work and a complete lack of communication.",
+      "underlying_driver": "Feeling disrespected and undervalued. The root trigger isn't just the roaches\u2014it's the personal sacrifice of burning half a workday (lost PTO or wages) only to be met with total silence. When nobody calls or shows, the customer feels their time means nothing to the company.",
+      "details_said": "Service address (412 Birch Lane), arrival window (8:00 AM\u201312:00 PM, now nearly 1:00 PM), service type (roach follow-up), zero contact from the branch, took half-day off work.",
+      "details_implied": "Customer is considering canceling their service plan if this isn't fixed immediately.",
+      "details_unsaid": "Whether the pest issue is still severe, when the initial treatment happened, and what times they are actually free going forward without taking more time off.",
+      "needs_next": "A genuine, immediate apology that owns the missed window and lost workday, dispatch/branch check on the technician's status, and a priority reschedule that fits their work hours.",
+      "summary": "Customer at 412 Birch Lane is frustrated after taking a half-day off for an 8\u201312 roach follow-up that no-showed without a call, and is questioning their service plan.",
+      "intent_emotion": "Intent: Resolve missed service / Emotion: Frustrated, undervalued.",
+      "roleplay_benchmark": "Deliver an empathetic opening that lowers the temperature without making excuses. (Strong reply apologizes specifically for wasting their morning and half-day off, avoids blaming traffic or dispatch, confirms 412 Birch Lane, and states they are checking technician status immediately.)",
+      "emotional_cue_for_trainees": "Never blame traffic, routing, or dispatch. Acknowledge the wasted half-day off right away so the customer feels respected as a person, not just an account number."
+    }
+  },
+  {
+    "id": "clip-4",
+    "title": "Clip 4: Termite Bait Stations \u2014 Implied Cancellation",
+    "difficulty": "Hard",
+    "category": "Technical Issue (Termite) + Implied Cancellation",
+    "audio_url": "Scenario 4.mp4",
+    "duration_hint": "0:21",
+    "script": "Yeah, hi... your tech did our annual termite inspection at 1908 Cedar Court last Friday, and I just noticed two of the green bait stations by the back deck are popped wide open and empty. Oh, and my auto-pay drafts on the first, so tell me if I need to freeze that before I start calling around.",
+    "emotion_cue": "Controlled, brisk, guarded, and skeptical.",
+    "answer_key": {
+      "core_issue": "Customer found two open, empty termite bait stations shortly after an annual inspection and is threatening to stop auto-pay and switch providers.",
+      "emotional_state": "Skeptical and losing trust; driven by feeling they paid for a professional inspection that missed obvious equipment issues right before their auto-pay renews.",
+      "underlying_driver": "Breach of trust and feeling cornered. They paid for a professional inspection last Friday, yet two stations were left popped open and empty. Because auto-pay drafts on the 1st, they feel like they're about to be charged automatically for sloppy work\u2014so they put up a hard wall (\"before I start calling around\") to protect themselves.",
+      "details_said": "Address (1908 Cedar Court), prior visit (annual termite inspection last Friday), technical issue (two green bait stations by the back deck are open and empty), billing detail (auto-pay drafts on the 1st).",
+      "details_implied": "Two problems exist, though only the stations are described directly: (1) a quality/technical failure on the termite inspection, and (2) an imminent cancellation/billing freeze before the 1st unless confidence is restored.",
+      "details_unsaid": "How many total stations are around the property, whether pets/lawnmowers could have popped the caps or if the tech failed to lock/reload them, and whether the customer has seen signs of termites.",
+      "needs_next": "Immediate acknowledgment of both the bait station inspection concern and the upcoming auto-pay date, a no-cost technician return visit before the 1st to inspect/re-bait all stations, and billing transparency so they don't feel trapped by auto-pay.",
+      "summary": "Customer at 1908 Cedar Court found two open, empty termite bait stations after Friday's annual inspection and is considering halting their auto-pay on the 1st to switch providers.",
+      "intent_emotion": "Intent: Technical re-service & retention save / Emotion: Distrustful, guarded.",
+      "roleplay_benchmark": "Address both the explicit technical concern and the implied cancellation threat without sounding defensive. (Strong reply apologizes for the condition of the stations after Friday's visit, notes the upcoming auto-pay on the 1st so they feel heard, and offers a priority no-charge technician return visit prior to the 1st.)",
+      "emotional_cue_for_trainees": "Treat the guarded tone as self-protection, not hostility. Rebuild trust by owning the missed stations and solving the issue before the 1st."
+    }
+  },
+  {
+    "id": "clip-5",
+    "title": "Clip 5: Shifting Request Mid-Call",
+    "difficulty": "Hard",
+    "category": "Mix (Billing + Technical Termite Issue + Cancellation)",
+    "audio_url": "Scenario 5.mp4",
+    "duration_hint": "0:25",
+    "script": "Hi, I'm calling about the renewal bill I got for 88 Maple Street... it looks like my termite protection went up by fifty dollars this year? ... Actually, you know what, forget the fifty bucks. My husband found mud tubes in the garage yesterday, and you guys just treated in June. So at this point I don't know if I'm renewing or just canceling.",
+    "emotion_cue": "Starts conversational and mildly annoyed, then drops into defeated, anxious, and overwhelmed.",
+    "answer_key": {
+      "core_issue": "Customer initially called about a $50 annual renewal increase, then pivoted to active termite mud tubes found in the garage just months after a June treatment\u2014leading them to consider canceling.",
+      "emotional_state": "Anxious and overwhelmed; the $50 price hike is minor compared to the fear that their June termite treatment failed and their home may have active termite damage.",
+      "underlying_driver": "Fear of home damage and helplessness. The $50 increase is a minor annoyance, which is why they abandon it mid-sentence. Underneath is real anxiety: termites threaten their home, and they feel powerless because they already paid for a June treatment that appears to have failed.",
+      "details_said": "Address (88 Maple Street), initial billing question ($50 renewal increase), real trigger (mud tubes found in garage yesterday), prior visit (termite treatment in June), current stance (unsure whether to renew or cancel).",
+      "details_implied": "They believe renewal means paying more for a treatment that didn't work, and they are unaware that active termite protection/warranty covers re-treatment at no additional service cost.",
+      "details_unsaid": "Exact date of the June treatment, whether the mud tubes have live termites or structural damage, and when the renewal bill is due.",
+      "needs_next": "Immediate pivot away from the $50 billing question to prioritize the mud tubes, reassurance about how their active termite warranty covers a re-inspection/re-treatment, and scheduling a termite specialist promptly (before discussing renewal pricing).",
+      "summary": "Customer at 88 Maple Street pivoted from a $50 renewal price question to threatening cancellation after finding garage mud tubes following a June termite treatment.",
+      "intent_emotion": "Intent: Urgent termite warranty check / Emotion: Anxious, doubtful.",
+      "roleplay_benchmark": "Follow the customer's pivot immediately\u2014do not get stuck explaining the $50 fee first. (Strong reply sets the $50 bill aside, validates how stressful finding mud tubes is after a June treatment, explains that active coverage is designed to protect them with a no-cost inspection/re-treatment, and verifies 88 Maple Street to schedule a specialist right away.)",
+      "emotional_cue_for_trainees": "Hear the sigh as the real turning point. Drop the billing topic immediately and calm their fear by explaining how their active warranty protects their home at no extra treatment cost."
+    }
+  }
+];
+
+    let scenarios = [...initialScenarios];
+    let selectedId = scenarios[0].id;
+    let showScript = false;
+    let isPlaying = false;
+    let playbackRate = 1.0;
+
+    // Elements
+    const scenarioListEl = document.getElementById('scenarioList');
+    const scenarioCountEl = document.getElementById('scenarioCount');
+    const mediaPlayer = document.getElementById('mediaPlayer');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const progressWrap = document.getElementById('progressWrap');
+    const progressFill = document.getElementById('progressFill');
+    const currentTimeLabel = document.getElementById('currentTimeLabel');
+    const durationLabel = document.getElementById('durationLabel');
+    const liveIndicator = document.getElementById('liveIndicator');
+    const fileStatusBox = document.getElementById('fileStatusBox');
+    const fileStatusText = document.getElementById('fileStatusText');
+    const toggleScriptBtn = document.getElementById('toggleScriptBtn');
+    const scriptContainer = document.getElementById('scriptContainer');
+    const answerKeyContainer = document.getElementById('answerKeyContainer');
+    const activeBadges = document.getElementById('activeBadges');
+    const deleteScenarioBtn = document.getElementById('deleteScenarioBtn');
+
+    function getSelected() {
+      return scenarios.find(s => s.id === selectedId) || scenarios[0];
+    }
+
+    function formatTime(sec) {
+      if (!sec || isNaN(sec) || !isFinite(sec)) return '00:00';
+      const m = Math.floor(sec / 60).toString().padStart(2, '0');
+      const s = Math.floor(sec % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function badgeClass(diff) {
+      const d = (diff || '').toLowerCase();
+      if (d === 'easy') return 'badge badge-easy';
+      if (d === 'hard') return 'badge badge-hard';
+      return 'badge badge-medium';
+    }
+
+    function renderScenarioList() {
+      scenarioCountEl.textContent = `${scenarios.length} Clip${scenarios.length === 1 ? '' : 's'}`;
+      scenarioListEl.innerHTML = '';
+      scenarios.forEach(s => {
+        const btn = document.createElement('button');
+        btn.className = `scenario-item ${s.id === selectedId ? 'active' : ''}`;
+        btn.innerHTML = `
+          <div class="scenario-item-top">
+            <span class="scenario-item-title">${s.title}</span>
+            <span class="${badgeClass(s.difficulty)}">${s.difficulty}</span>
+          </div>
+          <div class="scenario-item-meta">
+            <span>${s.category}</span>
+            <span>${s.display_name || s.audio_url || 'No file'}</span>
+          </div>
+        `;
+        btn.onclick = () => selectScenario(s.id);
+        scenarioListEl.appendChild(btn);
+      });
+    }
+
+    function loadMediaForScenario(s) {
+      stopPlayback();
+      if (s.audio_url) {
+        mediaPlayer.src = s.audio_url;
+        mediaPlayer.playbackRate = playbackRate;
+        mediaPlayer.load();
+        fileStatusBox.className = 'file-status-box ok';
+        fileStatusText.innerHTML = `<strong>Linked File:</strong> ${s.display_name || s.audio_url}`;
+      } else {
+        mediaPlayer.removeAttribute('src');
+        fileStatusBox.className = 'file-status-box warn';
+        fileStatusText.innerHTML = `<strong>No MP4 linked yet.</strong> Click "Change Audio File" or use Backup Voice.`;
+      }
+      durationLabel.textContent = s.duration_hint || '00:00';
+    }
+
+    function renderScript() {
+      const s = getSelected();
+      toggleScriptBtn.textContent = showScript ? 'Hide Script' : 'Show Script (Trainer Only)';
+      if (showScript) {
+        scriptContainer.innerHTML = `
+          <div class="script-visible">
+            <p class="script-text">"${s.script}"</p>
+            <p class="script-cue"><strong>Vocal / Emotional Cue:</strong> ${s.emotion_cue || 'Natural customer cadence'}</p>
+          </div>
+        `;
+      } else {
+        scriptContainer.innerHTML = `
+          <div class="script-hidden">
+            Script hidden for blind-listening drill. Click <strong>"Show Script"</strong> above to reveal.
+          </div>
+        `;
+      }
+    }
+
+    function renderAnswerKey() {
+      const s = getSelected();
+      const ak = s.answer_key || {};
+      activeBadges.innerHTML = `<span class="${badgeClass(s.difficulty)}">${s.difficulty}</span>`;
+
+      answerKeyContainer.innerHTML = `
+        <div class="ak-section">
+          <div class="ak-label">1. Core Issue</div>
+          <p>${ak.core_issue || '—'}</p>
+        </div>
+
+        <div class="ak-section ak-grid-2">
+          <div class="sub-card">
+            <h4>Surface Emotional State</h4>
+            <p>${ak.emotional_state || '—'}</p>
+          </div>
+          <div class="sub-card">
+            <h4>Underlying Driver</h4>
+            <p>${ak.underlying_driver || '—'}</p>
+          </div>
+        </div>
+
+        <div class="ak-section">
+          <div class="ak-label">2. Key Details (Said vs. Implied vs. Unsaid)</div>
+          <ul class="detail-list">
+            <li><span class="detail-tag tag-said">Said</span>${ak.details_said || '—'}</li>
+            <li><span class="detail-tag tag-implied">Implied</span>${ak.details_implied || '—'}</li>
+            <li><span class="detail-tag tag-unsaid">Unsaid</span>${ak.details_unsaid || '—'}</li>
+          </ul>
+        </div>
+
+        ${ak.emotional_cue_for_trainees ? `
+        <div class="ak-section">
+          <div class="callout-box">
+            <strong style="color:var(--brand-green);">Coaching Tip for Trainees:</strong> ${ak.emotional_cue_for_trainees}
+          </div>
+        </div>` : ''}
+
+        <div class="ak-section ak-grid-2">
+          <div>
+            <div class="ak-label">3. What Customer Needs Next</div>
+            <p style="font-size:0.9rem;">${ak.needs_next || '—'}</p>
+          </div>
+          <div>
+            <div class="ak-label">4. Intent & Emotion Tag</div>
+            <div class="intent-pill">${ak.intent_emotion || '—'}</div>
+          </div>
+        </div>
+
+        <div class="ak-section">
+          <div class="ak-label">5. Sample 1-Sentence CRM Summary</div>
+          <div class="crm-box">"${ak.summary || '—'}"</div>
+        </div>
+
+        <div class="ak-section">
+          <div class="ak-label">6. Role-Play Grading Benchmark</div>
+          <p style="font-size:0.92rem;">${ak.roleplay_benchmark || '—'}</p>
+        </div>
+      `;
+
+      deleteScenarioBtn.style.display = s.isCustom ? 'block' : 'none';
+    }
+
+    function selectScenario(id) {
+      selectedId = id;
+      showScript = false;
+      const s = getSelected();
+      renderScenarioList();
+      loadMediaForScenario(s);
+      renderScript();
+      renderAnswerKey();
+    }
+
+    function updatePlayUI(playing) {
+      isPlaying = playing;
+      liveIndicator.style.display = playing ? 'inline-flex' : 'none';
+      playPauseBtn.textContent = playing ? '❚❚ Pause Clip' : '▶ Play Clip';
+    }
+
+    function stopPlayback() {
+      window.speechSynthesis.cancel();
+      mediaPlayer.pause();
+      if (mediaPlayer.readyState > 0) {
+        mediaPlayer.currentTime = 0;
+      }
+      progressFill.style.width = '0%';
+      currentTimeLabel.textContent = '00:00';
+      updatePlayUI(false);
+    }
+
+    // Player Event Listeners
+    playPauseBtn.onclick = () => {
+      const s = getSelected();
+      if (!s.audio_url) {
+        playBackupTTS();
+        return;
+      }
+      if (isPlaying) {
+        mediaPlayer.pause();
+        updatePlayUI(false);
+      } else {
+        window.speechSynthesis.cancel();
+        mediaPlayer.playbackRate = playbackRate;
+        mediaPlayer.play().then(() => {
+          updatePlayUI(true);
+        }).catch(() => {
+          fileStatusBox.className = 'file-status-box warn';
+          fileStatusText.innerHTML = `<strong>Could not auto-load "${s.display_name || s.audio_url}".</strong> Put this HTML file in the same folder as your MP4s, or click <strong>"Change Audio File"</strong> below.`;
+          updatePlayUI(false);
+        });
+      }
+    };
+
+    stopBtn.onclick = stopPlayback;
+
+    mediaPlayer.addEventListener('loadedmetadata', () => {
+      durationLabel.textContent = formatTime(mediaPlayer.duration);
+    });
+
+    mediaPlayer.addEventListener('timeupdate', () => {
+      currentTimeLabel.textContent = formatTime(mediaPlayer.currentTime);
+      if (mediaPlayer.duration > 0) {
+        const pct = (mediaPlayer.currentTime / mediaPlayer.duration) * 100;
+        progressFill.style.width = `${pct}%`;
+      }
+    });
+
+    mediaPlayer.addEventListener('ended', () => {
+      updatePlayUI(false);
+      progressFill.style.width = '0%';
+      currentTimeLabel.textContent = '00:00';
+    });
+
+    mediaPlayer.addEventListener('error', () => {
+      const s = getSelected();
+      if (s && s.audio_url) {
+        fileStatusBox.className = 'file-status-box warn';
+        fileStatusText.innerHTML = `<strong>Waiting for file:</strong> "${s.display_name || s.audio_url}" not found in this folder. Click <strong>"Change Audio File"</strong> or <strong>"Bulk-Link MP4 Clips"</strong> at the top.`;
+      }
+    });
+
+    progressWrap.onclick = (e) => {
+      if (!mediaPlayer.duration) return;
+      const rect = progressWrap.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      mediaPlayer.currentTime = ratio * mediaPlayer.duration;
+    };
+
+    // Speed Pills
+    document.querySelectorAll('.speed-pill').forEach(pill => {
+      pill.onclick = () => {
+        document.querySelectorAll('.speed-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        playbackRate = parseFloat(pill.dataset.rate);
+        mediaPlayer.playbackRate = playbackRate;
+      };
+    });
+
+    // Backup Browser Voice
+    function playBackupTTS() {
+      stopPlayback();
+      const s = getSelected();
+      const utter = new SpeechSynthesisUtterance(s.script);
+      utter.rate = playbackRate;
+      utter.onstart = () => updatePlayUI(true);
+      utter.onend = () => updatePlayUI(false);
+      utter.onerror = () => updatePlayUI(false);
+      window.speechSynthesis.speak(utter);
+    }
+
+    document.getElementById('ttsFallbackBtn').onclick = playBackupTTS;
+
+    // Single File Attach
+    document.getElementById('singleFileInput').onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const s = getSelected();
+      s.audio_url = URL.createObjectURL(file);
+      s.display_name = file.name;
+      renderScenarioList();
+      loadMediaForScenario(s);
+    };
+
+    // Bulk File Attach (auto-matches Scenario 1..5)
+    document.getElementById('bulkFileInput').onchange = (e) => {
+      const files = Array.from(e.target.files);
+      if (!files.length) return;
+      let matched = 0;
+      files.forEach(file => {
+        const lower = file.name.toLowerCase();
+        scenarios.forEach((s, idx) => {
+          const num = idx + 1;
+          if (lower.includes(`scenario ${num}`) || lower.includes(`scenario_${num}`) || lower.includes(`clip ${num}`) || lower.includes(`clip_${num}`)) {
+            s.audio_url = URL.createObjectURL(file);
+            s.display_name = file.name;
+            matched++;
+          }
+        });
+      });
+      renderScenarioList();
+      loadMediaForScenario(getSelected());
+      alert(`Linked ${matched} audio/video file(s) to matching scenarios!`);
+    };
+
+    // Script Toggle
+    toggleScriptBtn.onclick = () => {
+      showScript = !showScript;
+      renderScript();
+    };
+
+    // Modal Controls
+    const addModal = document.getElementById('addModal');
+    document.getElementById('openAddModalBtn').onclick = () => addModal.classList.add('open');
+    document.getElementById('closeAddModalBtn').onclick = () => addModal.classList.remove('open');
+    document.getElementById('cancelAddBtn').onclick = () => addModal.classList.remove('open');
+
+    document.getElementById('addScenarioForm').onsubmit = (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('newAudioFile');
+      const file = fileInput.files[0];
+      const newObj = {
+        id: 'custom-' + Date.now(),
+        isCustom: true,
+        title: document.getElementById('newTitle').value.trim(),
+        difficulty: document.getElementById('newDifficulty').value,
+        category: document.getElementById('newCategory').value.trim() || 'Custom Scenario',
+        audio_url: file ? URL.createObjectURL(file) : '',
+        display_name: file ? file.name : '',
+        script: document.getElementById('newScript').value.trim(),
+        emotion_cue: 'Custom scenario cue',
+        answer_key: {
+          core_issue: document.getElementById('newCoreIssue').value.trim(),
+          emotional_state: document.getElementById('newEmotion').value.trim(),
+          underlying_driver: 'Review customer motivation during debrief.',
+          details_said: 'See transcript above.',
+          details_implied: 'Discuss subtext with trainees.',
+          details_unsaid: 'Identify missing verification or follow-up questions.',
+          needs_next: 'Verify account and address core issue.',
+          summary: document.getElementById('newSummary').value.trim(),
+          intent_emotion: document.getElementById('newTag').value.trim(),
+          roleplay_benchmark: 'Acknowledge emotion first, confirm details, and state clear next step.'
+        }
+      };
+      scenarios.push(newObj);
+      addModal.classList.remove('open');
+      e.target.reset();
+      selectScenario(newObj.id);
+    };
+
+    deleteScenarioBtn.onclick = () => {
+      scenarios = scenarios.filter(s => s.id !== selectedId);
+      selectScenario(scenarios[0].id);
+    };
+
+    // JSON Import
+    document.getElementById('jsonUploadInput').onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          const items = Array.isArray(data) ? data : [data];
+          items.forEach(item => {
+            if (item.title && item.script) {
+              item.id = item.id || ('custom-' + Date.now() + Math.random());
+              item.isCustom = true;
+              scenarios.push(item);
+            }
+          });
+          selectScenario(scenarios[scenarios.length - 1].id);
+        } catch (err) {
+          alert('Could not read JSON file.');
+        }
+      };
+      reader.readAsText(file);
+    };
+
+    // Initialize
+    selectScenario(selectedId);
+  </script>
+</body>
+</html>
